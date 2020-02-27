@@ -1,12 +1,21 @@
 ﻿using System;
+using System.Text.Json;
+using StarWarsTravelCalculator.Handlers;
+using StarWarsTravelCalculator.Models;
+using StarWarsTravelCalculator.Services;
 
 namespace StarWarsTravelCalculator
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            IRestClient client = new RestClient();
+            IHandler handler = new Handler(client);
+
+            var result = handler.RetrieveAll<Starship>();
+            
+            Console.WriteLine(JsonSerializer.Serialize(result.Results));
         }
     }
 }
