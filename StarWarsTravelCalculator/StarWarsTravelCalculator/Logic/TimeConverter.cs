@@ -1,18 +1,21 @@
 using System;
 using System.Globalization;
+using StarWarsTravelCalculator.Constants;
 
 namespace StarWarsTravelCalculator.Logic
 {
     public static class TimeConverter
     {
-        private const string Unknown = "unknown";
-        private static int hoursInADay = 24;
-        private static int daysInAMonth = 30;
-        private static int daysInAYear = 365;
         
+        /// <summary>
+        /// Convert the timeFrame into hours
+        /// Expected input is "{AmountOf} {Days|Weeks|Months|Years}"
+        /// </summary>
+        /// <param name="timeFrame"></param>
+        /// <returns></returns>
         public static long ConvertTimeFrameToHours(string timeFrame)
         {
-            if (timeFrame.Equals(Unknown, StringComparison.OrdinalIgnoreCase))
+            if (timeFrame.Equals(DefaultValues.Unknown, StringComparison.OrdinalIgnoreCase))
             {
                 return -1;
             }
@@ -40,14 +43,14 @@ namespace StarWarsTravelCalculator.Logic
         {
             return timeFrame.ToLower(CultureInfo.InvariantCulture) switch
             {
-                "day" => hoursInADay,
-                "days" => hoursInADay,
-                "week" => (hoursInADay * 7),
-                "weeks" => (hoursInADay * 7),
-                "month" => (daysInAMonth * hoursInADay),
-                "months" => (daysInAMonth * hoursInADay),
-                "year" => (daysInAYear * hoursInADay),
-                "years" => (daysInAYear * hoursInADay),
+                TimeFrame.Day => TimeFrame.HoursInADay,
+                TimeFrame.Days => TimeFrame.HoursInADay,
+                TimeFrame.Week => (TimeFrame.HoursInADay * 7),
+                TimeFrame.Weeks => (TimeFrame.HoursInADay * 7),
+                TimeFrame.Month => (TimeFrame.DaysInAMonth * TimeFrame.HoursInADay),
+                TimeFrame.Months => (TimeFrame.DaysInAMonth * TimeFrame.HoursInADay),
+                TimeFrame.Year => (TimeFrame.DaysInAYear * TimeFrame.HoursInADay),
+                TimeFrame.Years => (TimeFrame.DaysInAYear * TimeFrame.HoursInADay),
                 _ => -1
             };
         }

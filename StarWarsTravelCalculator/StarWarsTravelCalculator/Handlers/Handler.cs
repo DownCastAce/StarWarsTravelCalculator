@@ -1,12 +1,15 @@
 using System.Text.Json;
+using StarWarsTravelCalculator.Constants;
 using StarWarsTravelCalculator.Models;
 using StarWarsTravelCalculator.Services;
 
 namespace StarWarsTravelCalculator.Handlers
 {
+    /// <summary>
+    /// Generic Handler to help process the response of the API call
+    /// </summary>
     public class Handler : IHandler
     {
-        private string _apiEndpoint = "https://swapi.co/api/";
         private IRestClient _restClient;
 
         public Handler(IRestClient restClient)
@@ -14,11 +17,27 @@ namespace StarWarsTravelCalculator.Handlers
             _restClient = restClient;
         }
         
-        public SwApiResults<T> RetrieveAll<T>()
+        /// <summary>
+        /// Will retrieve all records of the type provided from the endpoint provided
+        /// </summary>
+        /// <param name="endpoint"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public SwApiResults<T> RetrieveAll<T>(string endpoint)
         {
-            string result = _restClient.Get(_apiEndpoint + "starships");
+            string response = _restClient.Get($"{StarWarsApiEndpoints.BaseEndpoint}{endpoint}");
 
-            return JsonSerializer.Deserialize<SwApiResults<T>>(result);
+            SwApiResults<T> result = JsonSerializer.Deserialize<SwApiResults<T>>(response);
+
+            while (!string.IsNullOrWhiteSpace(result.Next))
+            {
+                string paginatedResponse = _restClient.Get(result.Next);
+                SwApiResults<T> paginatedResult = JsonSerializer.Deserialize<SwApiResults<T>>(paginatedResponse);
+                result.Results.AddRange(paginatedResult.Results);
+                result.Next = paginatedResult.Next;
+            }
+
+            return result;
         }
     }
 }
