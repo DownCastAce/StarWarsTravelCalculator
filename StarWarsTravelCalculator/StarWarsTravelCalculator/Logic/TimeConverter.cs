@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using StarWarsTravelCalculator.Constants;
 
 namespace StarWarsTravelCalculator.Logic
@@ -41,7 +40,7 @@ namespace StarWarsTravelCalculator.Logic
 
         private static long GetHoursEquivalent(string timeFrame)
         {
-            return timeFrame.ToLower(CultureInfo.InvariantCulture) switch
+            return timeFrame.ToLowerInvariant() switch
             {
                 TimeFrame.Day => TimeFrame.HoursInADay,
                 TimeFrame.Days => TimeFrame.HoursInADay,
