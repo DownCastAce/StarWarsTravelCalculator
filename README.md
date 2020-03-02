@@ -75,8 +75,54 @@ From the above I discovered the following things
 * next was a link to the next page
 * The response was a pagination response and I would need to make multipe calls to get all results using the next link.
 * The results contains a list of star ships, it maxes out at ten per page
-* I would need the name, cargo_capacity and MGLT to calculate the amount of jumps
-* That cargo_capacity and MGLT could be "unknown" so I would have to be able to handle this
+* I would need the name, consumables and MGLT to calculate the amount of jumps
+* That consumables and MGLT could be "unknown" so I would have to be able to handle this
 
- ## Calculations
+## Calculations
 
+I know based from verifing that [MGLT](https://starwars.fandom.com/wiki/Megalight) is per hour speed.
+I know that the consumables can be n + days|weeks|months|years so I would need to convert this to the hour equivalent.
+
+Some assumptions.
+
+* 24 hours equals 1 day
+* 7 days equals 1 week
+* 30 days equals 1 month
+* 365 days equals 1 year
+
+The calculation for jumps is as follows (Distance) / (Speed * consumablesInHours)
+I will also round the value down as for example 4.5 is 4 jumps and half way through current consumables, therefore only four jumps required to travel the complete distance.
+
+Due to star ships having unknown consumables and MGLT the jumps for these will also be unknown.
+
+* **starship jumps**
+```console
+Enter the Distance to travel : 16546984684
+Executor : 7870
+Sentinel-class landing craft : 328313
+A-wing : 820782
+B-wing : 1082351
+Republic Cruiser : UNKNOWN
+Naboo fighter : UNKNOWN
+```
+
+## Conclusions
+
+I could expand on this more. I could look at making the code faster, adding threading. I could expand the code to support the other contracts (people, films, planets, species and vehicles).
+I could handle the issue of UNKNOWN with acceptable exceptions and also add logging to the whole application.
+
+## Running Application and Tests
+Using git clone the repository to your local.
+
+```console
+git clone https://github.com/DownCastAce/StarWarsTravelCalculator.git
+```
+
+Then using your preferred IDE ([Visual Studio](https://visualstudio.microsoft.com/), [Rider](https://www.jetbrains.com/rider/), etc) open the solution StarWarsTravelCalculator.sln.
+Build the solution and once complete, you can run the code.
+
+Valid input is 0 - n.
+
+To run the unit tests, ensure the both projects are built and then right click on the project StarWarsTravelCalculatorTests and select "Run Unit Tests"
+
+![Components](./CompletedTests.PNG) ![Components](./CodeCoverage.PNG)

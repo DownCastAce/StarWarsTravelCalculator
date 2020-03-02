@@ -23,7 +23,7 @@ namespace StarWarsTravelCalculator
             Console.Write("Enter the Distance to travel : ");
             bool correctInput = long.TryParse(Console.ReadLine(), out long distance);
 
-            if (!correctInput)
+            if (!correctInput || distance < 0)
             {
                 Console.WriteLine("Incorrect Input!");
                 return;
